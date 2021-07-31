@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace EverlyHealth.Core.Common
 {
+    /// <summary>
+    /// This class represents the result of some action and is usually returned by a method.
+    /// It holds a generic "result type" (Information, InvalidData, Error, etc.), and a message.
+    /// It's useful by itself, or could be used as a base class. For example: a ProcessFileResult class could
+    /// derive from this and add a "LineCount" property.
+    /// </summary>
     public class GenericResult
     {
         public GenericEnums.ResultType ResultType { get; set; }
