@@ -5,19 +5,20 @@
     </assembly>
     <members>
         <member name="M:MemberDirectory.App.Api.Controllers.MembersController.Get">
+            <summary>
+            Gets a directory list of members.
+            </summary>
+        </member>
+        <member name="M:MemberDirectory.App.Api.Controllers.MembersController.GetById(System.Int32)">
              <summary>
-             Gets a directory list of members.
+             Gets a member for the given Id.
              </summary>
              <remarks>
              Sample request:
             
-                 GET /Members
+                 GET /Members/1
              </remarks>
-        </member>
-        <member name="M:MemberDirectory.App.Api.Controllers.MembersController.GetById(System.Int32)">
-            <summary>
-            Gets a member for the given Id.
-            </summary>
+             <param name="id">The Id of the member to get.</param>
         </member>
     </members>
 </doc>
