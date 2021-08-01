@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace MemberDirectory.Data.Models
 {
-    public class DirectoryListMember : Member
+    public class DirectoryListMember
     {
+        public int Id { get; set; }
+
+        public string MemberName { get; set; }
+
+        public string WebsiteUrl { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
         public int FriendCount { get; set; }
     }
 }
