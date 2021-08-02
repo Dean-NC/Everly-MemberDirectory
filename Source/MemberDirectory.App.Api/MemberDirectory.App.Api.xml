@@ -20,5 +20,11 @@
              </remarks>
              <param name="id">The Id of the member to get.</param>
         </member>
+        <member name="T:MemberDirectory.App.Api.SharedHttpClient">
+            <summary>
+            The .Net HttpClient was designed to be shared where possible in the application
+            as a single instance, mainly for performance reasons. This class manages that shared client.
+            </summary>
+        </member>
     </members>
 </doc>
