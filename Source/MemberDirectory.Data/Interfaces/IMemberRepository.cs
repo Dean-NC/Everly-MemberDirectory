@@ -10,7 +10,7 @@ namespace MemberDirectory.Data.Interfaces
     {
         Task<IEnumerable<DirectoryListMember>> List();
 
-        Task<GenericResult> Add(Member member);
+        Task<DbResult> Add(Member member);
 
         Task<Member> Get(int id);
     }
