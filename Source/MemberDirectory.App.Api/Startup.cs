@@ -54,6 +54,9 @@ namespace MemberDirectory.App.Api
 
             // Anonymous URL shortener service is singleton
             services.AddSingleton<Interfaces.IUrlShortener, Services.AnonymousUrlShortener>();
+
+            // HtmlParser
+            services.AddScoped<Interfaces.IHtmlParser, Services.HtmlParser>();
         }
 
         // Configure() is called by the runtime. Use it to configure the HTTP request pipeline.

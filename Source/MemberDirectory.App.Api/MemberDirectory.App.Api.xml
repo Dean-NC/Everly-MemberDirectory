@@ -20,6 +20,13 @@
              </remarks>
              <param name="id">The Id of the member to get.</param>
         </member>
+        <member name="M:MemberDirectory.App.Api.Services.HtmlParser.GetTextForHeadingTags(System.IO.Stream)">
+            <summary>
+            Gets the text of all H1 through H3 tags
+            </summary>
+            <param name="htmlStream">A stream with the HTML content to parse</param>
+            <returns>A list of strings for all H1 through H3 tags combined</returns>
+        </member>
         <member name="T:MemberDirectory.App.Api.SharedHttpClient">
             <summary>
             The .Net HttpClient was designed to be shared where possible in the application
