@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MemberDirectory.Data;
+using MemberDirectory.Data.Interfaces;
+using MemberDirectory.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +36,18 @@ namespace MemberDirectory.App.Api
                 var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            //--------------
+            // Add things to the dependency-injection container
+            //--------------
+
+            // DbConfig holds the connection string. Add as a singleton to be given to each repository.
+            services.AddSingleton(_ => new DbConfig(
+                Configuration.GetConnectionString("main")
+            ));
+
+            // Data repositories
+            services.AddScoped<IMemberRepository, MemberRepository>();
         }
 
         // Configure() is called by the runtime. Use it to configure the HTTP request pipeline.
