@@ -76,7 +76,7 @@ namespace MemberDirectory.Data.Repositories
         }
 
         /// <summary>
-        /// Adds a new member.
+        /// Adds website headings for the given member.
         /// </summary>
         /// <param name="memberId">The Id of the member to add the headings to.</param>
         /// <param name="headings">A list of strings for the headings text.</param>
@@ -103,10 +103,29 @@ namespace MemberDirectory.Data.Repositories
         }
 
         /// <summary>
+        /// Gets website headings for the given member.
+        /// </summary>
+        /// <param name="memberId">The Id of the member.</param>
+        public async Task<IEnumerable<string>> GetWebsiteHeadings(int memberId)
+        {
+            string sql = @"
+                Select HeadingText
+                From WebsiteHeading
+                Where MemberId = @id
+            ";
+
+            DynamicParameters theParams = new();
+            theParams.Add("@id", memberId, DbType.Int32);
+
+            using IDbConnection connection = await GetDbConnectionAsync();
+            return await connection.QueryAsync<string>(sql, theParams);
+        }
+
+        /// <summary>
         /// Gets a member by Id.
         /// </summary>
         /// <param name="id">The Id of the member to get.</param>
-        public async Task<Member> Get(int id)
+        public async Task<T> Get<T>(int id) where T : Member, new()
         {
             string sql = @"
                 Select
@@ -121,7 +140,37 @@ namespace MemberDirectory.Data.Repositories
             theParams.Add("@id", id, DbType.Int32);
 
             using IDbConnection connection = await GetDbConnectionAsync();
-            return await connection.QuerySingleOrDefaultAsync<Member>(sql, theParams);
+            return await connection.QuerySingleOrDefaultAsync<T>(sql, theParams);
+        }
+
+        /// <summary>
+        /// Gets friends (as member records) for the given member.
+        /// </summary>
+        /// <param name="id">The Id of the member.</param>
+        public async Task<IEnumerable<Member>> GetFriends(int memberId)
+        {
+            string sql = @"
+                Select
+	                Member.Id,
+                    Member.MemberName,
+	                Case
+		                When Member.WebsiteShortUrl Is Null Then Member.WebsiteUrl
+		                Else Member.WebsiteShortUrl
+	                End As WebsiteUrl,
+	                Friendship.DateCreated
+                From
+	                Friendship
+                Inner Join
+	                Member On Friendship.FriendMemberId = Member.Id
+                Where
+	                Friendship.MemberId = @memberId
+                ";
+
+            DynamicParameters theParams = new();
+            theParams.Add("@memberId", memberId, DbType.Int32);
+
+            using IDbConnection connection = await GetDbConnectionAsync();
+            return await connection.QueryAsync<Member>(sql, theParams);
         }
     }
 }

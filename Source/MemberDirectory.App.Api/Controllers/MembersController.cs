@@ -36,9 +36,9 @@ namespace MemberDirectory.App.Api.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Data.Models.Member>> GetById(int id)
+        public async Task<ActionResult<MemberProfile>> GetById(int id)
         {
-            var result = await _memberService.Get(id);
+            var result = await _memberService.GetProfile(id);
 
             return result?.Id > 0 ? result : NotFound();
         }

@@ -8,9 +8,11 @@ namespace MemberDirectory.Data.Models
 {
     public class Friend
     {
-        public int FriendshipId { get; set; }
+        public int MemberId { get; set; }
 
-        public string WebiteUrl { get; set; }
+        public string MemberName { get; set; }
+
+        public string WebsiteUrl { get; set; }
 
         public DateTime StartDate { get; set; }
     }

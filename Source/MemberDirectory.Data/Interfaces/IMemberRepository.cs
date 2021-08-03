@@ -14,6 +14,10 @@ namespace MemberDirectory.Data.Interfaces
 
         Task AddWebsiteHeadings(int memberId, IEnumerable<string> headings);
 
-        Task<Member> Get(int id);
+        Task<IEnumerable<string>> GetWebsiteHeadings(int memberId);
+
+        Task<IEnumerable<Member>> GetFriends(int memberId);
+
+        Task<T> Get<T>(int id) where T : Member, new();
     }
 }

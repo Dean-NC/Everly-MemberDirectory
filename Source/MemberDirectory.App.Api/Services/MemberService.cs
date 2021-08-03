@@ -92,6 +92,10 @@ namespace MemberDirectory.App.Api.Services
             }
         }
 
+        /// <summary>
+        /// Returns a simple member object for the given Id.
+        /// </summary>
+        /// <param name="id">The Id of the member</param>
         public async Task<Member> Get(int id)
         {
             if (id <= 0)
@@ -99,7 +103,47 @@ namespace MemberDirectory.App.Api.Services
                 return null;
             }
 
-            return await _memberRepository.Get(id);
+            return await _memberRepository.Get<Member>(id);
+        }
+
+        /// <summary>
+        /// Returns a member profile object, which contains things like friend list, etc. for the given member.
+        /// </summary>
+        /// <param name="id">The Id of the member</param>
+        public async Task<MemberProfile> GetProfile(int id)
+        {
+            if (id <= 0)
+            {
+                return null;
+
+            }
+
+            // Get the member record from the database.
+            MemberProfile result = await _memberRepository.Get<MemberProfile>(id);
+            if (result?.Id <= 0) return result;
+
+            // Get the website headings for the member.
+            result.WebsiteHeadings = await _memberRepository.GetWebsiteHeadings(id);
+
+            // Get the friends (as member models) of the member.
+            var friendMemberRecords = await _memberRepository.GetFriends(id);
+            
+            // Map member models to friend models.
+            if (friendMemberRecords != null)
+            {
+                result.Friends =
+                    from x in friendMemberRecords
+                    where x != null
+                    select new Models.Friend()
+                    {
+                        MemberId = x.Id,
+                        Name = x.MemberName,
+                        WebsiteUrl = x.WebsiteUrl,
+                        StartDate = x.DateCreated
+                    };
+            }
+
+            return result;
         }
 
         private async Task<IEnumerable<string>> GetWebsiteHeadings(string url)
