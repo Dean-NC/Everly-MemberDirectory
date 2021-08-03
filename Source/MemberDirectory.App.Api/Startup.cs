@@ -50,6 +50,7 @@ namespace MemberDirectory.App.Api
 
             // Data repositories
             services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 
             // Anonymous URL shortener service is singleton
             services.AddSingleton<Interfaces.IUrlShortener, Services.AnonymousUrlShortener>();
@@ -59,6 +60,9 @@ namespace MemberDirectory.App.Api
 
             // Member service
             services.AddScoped<Services.MemberService, Services.MemberService>();
+
+            // Friendship service
+            services.AddScoped<Services.FriendshipService, Services.FriendshipService>();
         }
 
         // Configure() is called by the runtime. Use it to configure the HTTP request pipeline.

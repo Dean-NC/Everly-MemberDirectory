@@ -8,10 +8,12 @@ namespace MemberDirectory.Data.Models
 {
     public class ExpertSearchResult
     {
-        public int MemberId { get; set; }
+        public string MutualFriend { get; set; }
 
-        public string MemberName { get; set; }
+        public int PotentialFriendId { get; set; }
 
-        public string WebsiteHeading { get; set; }
+        public string PotentialFriend { get; set; }
+
+        public string HeadingText { get; set; }
     }
 }

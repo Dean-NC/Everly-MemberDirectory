@@ -31,7 +31,7 @@ namespace MemberDirectory.App.Api.Controllers
         }
 
         /// <summary>
-        /// Gets a member for the given Id.
+        /// Gets a member profile for the given Id.
         /// </summary>
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
