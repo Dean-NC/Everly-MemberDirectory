@@ -1,4 +1,5 @@
 ﻿using EverlyHealth.Core.Common;
+using MemberDirectory.App.Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,7 +33,7 @@ namespace MemberDirectory.App.Api.Controllers
         /// <summary>
         /// Gets a member for the given Id.
         /// </summary>
-        [HttpGet("{id:int}", Name = "GetById")]
+        [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Data.Models.Member> GetById(int id)
@@ -47,20 +48,26 @@ namespace MemberDirectory.App.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<Data.Models.Member>> Create(Models.NewMember data)
+        public async Task<ActionResult<Data.Models.Member>> Create(NewMember data)
         {
-            var result = await _memberService.Add(data);
+            BusinessResult<Data.Models.Member> result = await _memberService.Add(data);
 
-            if (result.IsSuccess && result.RecordId > 0)
+            if (result.IsSuccess && result.Entity?.Id > 0)
             {
-                return CreatedAtAction(nameof(GetById), new { id = 1 }, result.Entity);
+                // For success, return:
+                //    201 "Created", a "Location" header with the URL to access the new record, and
+                //    the new record model data in the response body.
+                return CreatedAtAction(nameof(GetById), new { id = result.Entity.Id }, result.Entity);
             }
             else if (result.DbResultReason == Data.DbResultReason.DuplicateRecord)
             {
+                // For duplicate records, return 409 "Conflict"
                 return Conflict();
             }
             else if (result.ResultType == GenericEnums.ResultType.MissingRequiredInfo)
             {
+                // If any required input data is missing, return 400 "Bad Request" and a detail message.
+                // Note: .Net can send "Problem Details"
                 return Problem(
                     title: "Missing required information",
                     detail: result.Message

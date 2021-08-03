@@ -76,6 +76,33 @@ namespace MemberDirectory.Data.Repositories
         }
 
         /// <summary>
+        /// Adds a new member.
+        /// </summary>
+        /// <param name="memberId">The Id of the member to add the headings to.</param>
+        /// <param name="headings">A list of strings for the headings text.</param>
+        public async Task AddWebsiteHeadings(int memberId, IEnumerable<string> headings)
+        {
+            string sql =
+               @"Insert Into WebsiteHeading (MemberId, HeadingText)
+	                Select
+		                @memberId, Item
+	                From
+		                @headings
+	                ";
+
+            var sqlRecords = MakeSqlDataRecords(headings);
+
+            using IDbConnection connection = await GetDbConnectionAsync();
+            await connection.ExecuteAsync(sql,
+                new
+                {
+                    memberId,
+                    headings = sqlRecords.AsTableValuedParameter("StringValuesType")
+                }
+            );
+        }
+
+        /// <summary>
         /// Gets a member by Id.
         /// </summary>
         /// <param name="id">The Id of the member to get.</param>

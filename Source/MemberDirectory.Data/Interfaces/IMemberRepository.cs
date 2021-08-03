@@ -12,6 +12,8 @@ namespace MemberDirectory.Data.Interfaces
 
         Task<T> Add<T>(Member member) where T : DbResult, new();
 
+        Task AddWebsiteHeadings(int memberId, IEnumerable<string> headings);
+
         Task<Member> Get(int id);
     }
 }

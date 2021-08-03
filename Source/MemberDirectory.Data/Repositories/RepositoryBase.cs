@@ -56,6 +56,21 @@ namespace MemberDirectory.Data.Repositories
             }
         }
 
+        protected static IEnumerable<SqlDataRecord> MakeSqlDataRecords(IEnumerable<string> items)
+        {
+            SqlMetaData[] metaData = new[]
+            {
+                new SqlMetaData("Item", SqlDbType.NVarChar, 120)
+            };
+            SqlDataRecord record = new(metaData);
+
+            foreach (string item in items)
+            {
+                record.SetString(0, item);
+                yield return record;
+            }
+        }
+
         protected static bool IsDuplicateError(int dbErrorNumber)
         {
             // Determines if the given error number is because of duplicate key or unique constraint violation.
