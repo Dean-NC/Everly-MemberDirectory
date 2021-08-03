@@ -17,15 +17,18 @@ namespace MemberDirectory.App.Api.Services
     {
         private readonly IMemberRepository _memberRepository;
         private readonly IHtmlParser _htmlParser;
+        private readonly IUrlShortener _urlShortener;
         private readonly ILogger<MemberService> _logger;
 
         public MemberService(
             IMemberRepository memberRepository,
             IHtmlParser htmlParser,
+            IUrlShortener urlShortener,
             ILogger<MemberService> logger)
         {
             _memberRepository = memberRepository;
             _htmlParser = htmlParser;
+            _urlShortener = urlShortener;
             _logger = logger;
         }
 
@@ -50,11 +53,12 @@ namespace MemberDirectory.App.Api.Services
                 // The values of any H1 through H3 tags in the person's website should be captured and stored.
                 var headingTexts = await GetWebsiteHeadings(data.WebsiteUrl);
 
-                // The domain data model
+                // The domain data model. Website URL should be shortened if possible.
                 Member member = new()
                 {
                     MemberName = data.Name,
-                    WebsiteUrl = data.WebsiteUrl
+                    WebsiteUrl = data.WebsiteUrl,
+                    WebsiteShortUrl = await _urlShortener.Shorten(data.WebsiteUrl)
                 };
 
                 // Start a .Net transaction that can be committed. If not committed, all database-related

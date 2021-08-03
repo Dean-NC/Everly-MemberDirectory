@@ -51,9 +51,6 @@ namespace MemberDirectory.App.Api
             // Data repositories
             services.AddScoped<IMemberRepository, MemberRepository>();
 
-            // HttpClient should be shared as a single instance acrosss the application where possible
-            services.AddSingleton(_ => new SharedHttpClient());
-
             // Anonymous URL shortener service is singleton
             services.AddSingleton<Interfaces.IUrlShortener, Services.AnonymousUrlShortener>();
 
