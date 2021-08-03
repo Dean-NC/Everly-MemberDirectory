@@ -92,6 +92,16 @@ namespace MemberDirectory.App.Api.Services
             }
         }
 
+        public async Task<Member> Get(int id)
+        {
+            if (id <= 0)
+            {
+                return null;
+            }
+
+            return await _memberRepository.Get(id);
+        }
+
         private async Task<IEnumerable<string>> GetWebsiteHeadings(string url)
         {
             using var response = await SharedHttpClient.Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);

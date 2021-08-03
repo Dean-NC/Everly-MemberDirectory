@@ -16,6 +16,6 @@ namespace MemberDirectory.Data.Models
 
         public string WebsiteShortUrl { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }

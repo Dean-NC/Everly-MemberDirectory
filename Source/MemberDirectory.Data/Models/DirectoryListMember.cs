@@ -14,7 +14,7 @@ namespace MemberDirectory.Data.Models
 
         public string WebsiteUrl { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public int FriendCount { get; set; }
     }

@@ -25,9 +25,9 @@ namespace MemberDirectory.App.Api.Controllers
         /// Gets a directory list of members.
         /// </summary>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IEnumerable<Data.Models.DirectoryListMember>> Get()
         {
-            return Ok();
+            return await _memberService.List();
         }
 
         /// <summary>
@@ -36,9 +36,11 @@ namespace MemberDirectory.App.Api.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Data.Models.Member> GetById(int id)
+        public async Task<ActionResult<Data.Models.Member>> GetById(int id)
         {
-            return Ok();
+            var result = await _memberService.Get(id);
+
+            return result?.Id > 0 ? result : NotFound();
         }
 
         /// <summary>
