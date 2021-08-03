@@ -10,15 +10,14 @@
             </summary>
         </member>
         <member name="M:MemberDirectory.App.Api.Controllers.MembersController.GetById(System.Int32)">
-             <summary>
-             Gets a member for the given Id.
-             </summary>
-             <remarks>
-             Sample request:
-            
-                 GET /Members/1
-             </remarks>
-             <param name="id">The Id of the member to get.</param>
+            <summary>
+            Gets a member for the given Id.
+            </summary>
+        </member>
+        <member name="M:MemberDirectory.App.Api.Controllers.MembersController.Create(MemberDirectory.App.Api.Models.NewMember)">
+            <summary>
+            Creates a member.
+            </summary>
         </member>
         <member name="M:MemberDirectory.App.Api.Services.HtmlParser.GetTextForHeadingTags(System.IO.Stream)">
             <summary>

@@ -18,6 +18,9 @@ namespace MemberDirectory.Data.Repositories
             : base(dbConfig)
         { }
 
+        /// <summary>
+        /// Gets a directory listing of members.
+        /// </summary>
         public async Task<IEnumerable<DirectoryListMember>> List()
         {
             string sql = @"
@@ -41,19 +44,27 @@ namespace MemberDirectory.Data.Repositories
             return await connection.QueryAsync<DirectoryListMember>(sql);
         }
 
-        public async Task<DbResult> Add(Member member)
+        /// <summary>
+        /// Adds a new member.
+        /// </summary>
+        /// <typeparam name="T">Any type that derives from DbResult.</typeparam>
+        /// <param name="member">A data model with member information.</param>
+        /// <returns>A DbResult or child class of DbResult.</returns>
+        public async Task<T> Add<T>(Member member) where T : DbResult, new()
         {
-            DbResult result = new();
+            T result = new();
 
             string sql =
                 "Insert Into Member (MemberName, WebsiteUrl, WebsiteShortUrl) " +
-                "Values (@MemberName, @WebsiteUrl, @WebsiteShortUrl)";
+                "Values (@MemberName, @WebsiteUrl, @WebsiteShortUrl); " +
+                "Select SCOPE_IDENTITY()";
 
             using IDbConnection connection = await GetDbConnectionAsync();
 
             try
             {
-                await connection.ExecuteAsync(sql, member);
+                member.Id = await connection.ExecuteScalarAsync<int>(sql, member);
+                result.RecordId = member.Id;
             }
             catch (SqlException ex) when (IsDuplicateError(ex.Number))
             {
@@ -64,6 +75,10 @@ namespace MemberDirectory.Data.Repositories
             return result;
         }
 
+        /// <summary>
+        /// Gets a member by Id.
+        /// </summary>
+        /// <param name="id">The Id of the member to get.</param>
         public async Task<Member> Get(int id)
         {
             string sql = @"

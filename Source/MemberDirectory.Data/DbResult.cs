@@ -6,6 +6,8 @@ namespace MemberDirectory.Data
 {
     public class DbResult : GenericResult
     {
+        public int RecordId { get; set; }
+
         public DbResultReason DbResultReason { get; internal set; }
     }
 

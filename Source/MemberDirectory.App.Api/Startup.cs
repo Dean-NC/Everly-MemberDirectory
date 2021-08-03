@@ -25,8 +25,11 @@ namespace MemberDirectory.App.Api
         // ConfigureServices() is called by the runtime. Use it to add services to the dependency injection container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
+            //--------------
+            // Swagger documentation
+            //--------------
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MemberDirectory.App.Api", Version = "v1" });
@@ -40,7 +43,6 @@ namespace MemberDirectory.App.Api
             //--------------
             // Add things to the dependency-injection container
             //--------------
-
             // DbConfig holds the connection string. Add as a singleton to be given to each repository.
             services.AddSingleton(_ => new DbConfig(
                 Configuration.GetConnectionString("main")
@@ -57,6 +59,9 @@ namespace MemberDirectory.App.Api
 
             // HtmlParser
             services.AddScoped<Interfaces.IHtmlParser, Services.HtmlParser>();
+
+            // Member service
+            services.AddScoped<Services.MemberService, Services.MemberService>();
         }
 
         // Configure() is called by the runtime. Use it to configure the HTTP request pipeline.
