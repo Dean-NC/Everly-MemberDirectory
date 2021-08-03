@@ -21,10 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Reference Include="EverlyHealth.Core">
+      <HintPath>..\..\Source\MemberDirectory.App.Api\bin\Debug\net5.0-windows\EverlyHealth.Core.dll</HintPath>
+    </Reference>
     <Reference Include="MemberDirectory.App.Api">
       <HintPath>..\..\Source\MemberDirectory.App.Api\bin\Debug\net5.0-windows\MemberDirectory.App.Api.dll</HintPath>
     </Reference>
