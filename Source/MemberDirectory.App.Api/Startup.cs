@@ -52,16 +52,15 @@ namespace MemberDirectory.App.Api
             services.AddScoped<IMemberRepository, MemberRepository>();
             services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 
-            // Anonymous URL shortener service is singleton
-            services.AddSingleton<Interfaces.IUrlShortener, Services.AnonymousUrlShortener>();
-
-            // HtmlParser
+            // Helper services
+            services.AddScoped<Interfaces.IUrlShortener, Services.AnonymousUrlShortener>();
             services.AddScoped<Interfaces.IHtmlParser, Services.HtmlParser>();
 
-            // Member service
-            services.AddScoped<Services.MemberService, Services.MemberService>();
+            // .Net HttpClient is designed to be shared as a single instance where possible
+            services.AddSingleton(SharedHttpClient.Client);
 
-            // Friendship service
+            // App services
+            services.AddScoped<Services.MemberService, Services.MemberService>();
             services.AddScoped<Services.FriendshipService, Services.FriendshipService>();
         }
 

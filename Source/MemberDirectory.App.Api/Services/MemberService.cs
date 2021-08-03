@@ -16,6 +16,7 @@ namespace MemberDirectory.App.Api.Services
     public class MemberService
     {
         private readonly IMemberRepository _memberRepository;
+        private readonly HttpClient _httpClient;
         private readonly IHtmlParser _htmlParser;
         private readonly IUrlShortener _urlShortener;
         private readonly ILogger<MemberService> _logger;
@@ -24,9 +25,11 @@ namespace MemberDirectory.App.Api.Services
             IMemberRepository memberRepository,
             IHtmlParser htmlParser,
             IUrlShortener urlShortener,
+            HttpClient httpClient,
             ILogger<MemberService> logger)
         {
             _memberRepository = memberRepository;
+            _httpClient = httpClient;
             _htmlParser = htmlParser;
             _urlShortener = urlShortener;
             _logger = logger;
@@ -148,7 +151,7 @@ namespace MemberDirectory.App.Api.Services
 
         private async Task<IEnumerable<string>> GetWebsiteHeadings(string url)
         {
-            using var response = await SharedHttpClient.Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+            using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
             if (!response.IsSuccessStatusCode) return null;
 
             return _htmlParser.GetTextForHeadingTags(await response.Content.ReadAsStreamAsync());

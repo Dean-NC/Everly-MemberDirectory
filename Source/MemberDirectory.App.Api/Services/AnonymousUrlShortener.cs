@@ -12,10 +12,12 @@ namespace MemberDirectory.App.Api.Services
     {
         const string _serviceUrl = "https://api.sh4re.be";
 
+        private readonly HttpClient _httpClient;
         private readonly ILogger<AnonymousUrlShortener> _logger;
 
-        public AnonymousUrlShortener(ILogger<AnonymousUrlShortener> logger)
+        public AnonymousUrlShortener(HttpClient httpClient, ILogger<AnonymousUrlShortener> logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
         }
 
@@ -37,7 +39,7 @@ namespace MemberDirectory.App.Api.Services
                     new KeyValuePair<string, string>("url", url)
                 });
 
-                using var response = await SharedHttpClient.Client.PostAsync(_serviceUrl, requestContent);
+                using var response = await _httpClient.PostAsync(_serviceUrl, requestContent);
 
                 if (response.IsSuccessStatusCode)
                 {
