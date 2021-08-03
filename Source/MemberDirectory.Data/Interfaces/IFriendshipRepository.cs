@@ -8,7 +8,7 @@ namespace MemberDirectory.Data.Interfaces
 {
     public interface IFriendshipRepository
     {
-
+        Task AddFriendsToMember(int memberId, IEnumerable<int> friendIds);
 
         Task<IEnumerable<Models.ExpertSearchResult>> MutualFriendSearch(int memberId, string websiteHeadingSearch);
     }

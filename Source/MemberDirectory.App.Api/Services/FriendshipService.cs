@@ -36,5 +36,15 @@ namespace MemberDirectory.App.Api.Services
 
             return await _friendshipRepository.MutualFriendSearch(memberId, headingTextSearch);
         }
+
+        /// <summary>
+        /// Adds friends to a given member.
+        /// </summary>
+        /// <param name="memberId">The Id of the member to add friends to.</param>
+        /// <param name="friendIds">A list of member Ids to add as friends to the given member.</param>
+        public async Task AddFriendsToMember(int memberId, IEnumerable<int> friendIds)
+        {
+            await _friendshipRepository.AddFriendsToMember(memberId, friendIds);
+        }
     }
 }

@@ -7,8 +7,15 @@
         <member name="M:MemberDirectory.App.Api.Controllers.FriendshipsController.MutualFriendSearch(System.Int32,System.String)">
             <summary>
             Searches for potential new friends for the given member, that share a mutual friend
-            and have a search phrase in one of their website headings.
+            and are "experts" (have a search phrase in their website headings).
             </summary>
+        </member>
+        <member name="M:MemberDirectory.App.Api.Controllers.FriendshipsController.AddToMember(System.Int32,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Adds friends to a given member.
+            </summary>
+            <param name="memberId">The Id of the member to add friends to.</param>
+            <param name="friendIds">A list of member Ids to add as friends to the given member.</param>
         </member>
         <member name="M:MemberDirectory.App.Api.Controllers.MembersController.Get">
             <summary>
@@ -24,6 +31,21 @@
             <summary>
             Creates a member.
             </summary>
+        </member>
+        <member name="M:MemberDirectory.App.Api.Services.FriendshipService.MutualFriendSearch(System.Int32,System.String)">
+            <summary>
+            Searches for potential new friends for the given member, that share a mutual friend
+            and are "experts" (have a search phrase in their website headings).
+            </summary>
+            <param name="memberId">The id of the member to find friends for.</param>
+            <param name="headingTextSearch">A word or phrase to search in the new friend's website headings.</param>
+        </member>
+        <member name="M:MemberDirectory.App.Api.Services.FriendshipService.AddFriendsToMember(System.Int32,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Adds friends to a given member.
+            </summary>
+            <param name="memberId">The Id of the member to add friends to.</param>
+            <param name="friendIds">A list of member Ids to add as friends to the given member.</param>
         </member>
         <member name="M:MemberDirectory.App.Api.Services.HtmlParser.GetTextForHeadingTags(System.IO.Stream)">
             <summary>
