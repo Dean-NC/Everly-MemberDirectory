@@ -13,7 +13,7 @@ Visual Studio: this was done using 2019, but might work with 2017. The projects 
 
 .Net version 5.
 
-Database access is done using the open-source _Dapper_ library, which is a micro ORM, and uses ADO.Net underneath. _Dapper_ (<b>D</b>ata access M<b>apper</b>) maps database records to your model classes. Microsoft Entity Framework is good, and I've used it, but for this project I used SQL.
+Database access is done using SQL and the open-source _Dapper_ library, which is a micro ORM, and uses ADO.Net underneath. _Dapper_ (<b>D</b>ata access M<b>apper</b>) maps database records to your model classes. Microsoft Entity Framework is good and I use it sometimes, but mostly I perfer the combination of SQL and a lightweight ORM.
 
 I used a basic repository pattern for database access. I put the repositories and data models in a separate project, called _MemberDirectory.Data_.
 
