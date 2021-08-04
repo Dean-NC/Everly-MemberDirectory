@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace MemberDirectory.App.Api.Services
 {
+    /// <summary>
+    /// This Url shortener uses a free remote service that currently does not require registration or an API key.
+    /// </summary>
     public class AnonymousUrlShortener : Interfaces.IUrlShortener
     {
+        // I found the free shortener service "sh4re". I wrote this wrapper class around it.
         const string _serviceUrl = "https://api.sh4re.be";
 
         private readonly HttpClient _httpClient;
@@ -34,18 +38,22 @@ namespace MemberDirectory.App.Api.Services
 
             try
             {
+                // Prepare the Form Url-encoded value
                 using HttpContent requestContent = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
                 {
                     new KeyValuePair<string, string>("url", url)
                 });
 
+                // Call the service
                 using var response = await _httpClient.PostAsync(_serviceUrl, requestContent);
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Read the response as string data and deserialize to a private class object
                     string resultJson = await response.Content.ReadAsStringAsync();
                     var shortenResult = JsonSerializer.Deserialize<ShortenResult>(resultJson);
 
+                    // If we have a shortened result, return it
                     if (shortenResult?.success == true && shortenResult.url?.Length > 0)
                     {
                         return shortenResult.url;

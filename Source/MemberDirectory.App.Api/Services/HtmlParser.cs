@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace MemberDirectory.App.Api.Services
 {
+    /// <summary>
+    /// Provides HTML parsing capability, like getting the text for Heading tags
+    /// </summary>
     public class HtmlParser : Interfaces.IHtmlParser
     {
+        // This class uses the HtmlAgilityPack open-source library to parse the HTML.
+        // https://github.com/zzzprojects/html-agility-pack
+
         private readonly ILogger<HtmlParser> _logger;
 
         public HtmlParser(ILogger<HtmlParser> logger)

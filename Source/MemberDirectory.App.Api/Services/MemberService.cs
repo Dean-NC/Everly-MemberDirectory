@@ -40,6 +40,10 @@ namespace MemberDirectory.App.Api.Services
             return await _memberRepository.List();
         }
 
+        /// <summary>
+        /// Adds a new member.
+        /// </summary>
+        /// <param name="data">The required information for adding a new member.</param>
         public async Task<BusinessResult<Member>> Add(NewMember data)
         {
             if (data == null || string.IsNullOrWhiteSpace(data.Name) || string.IsNullOrWhiteSpace(data.WebsiteUrl))
@@ -78,8 +82,10 @@ namespace MemberDirectory.App.Api.Services
                     // Add website headings to the database
                     await _memberRepository.AddWebsiteHeadings(memberAddResult.RecordId, headingTexts);
 
+                    // Complete the transaction and return the result
                     trans.Complete();
                     memberAddResult.Entity = member;
+
                     return memberAddResult;
                 }
             }
@@ -96,7 +102,7 @@ namespace MemberDirectory.App.Api.Services
         }
 
         /// <summary>
-        /// Returns a simple member object for the given Id.
+        /// Returns a simple member object for the given member Id.
         /// </summary>
         /// <param name="id">The Id of the member</param>
         public async Task<Member> Get(int id)
@@ -151,9 +157,11 @@ namespace MemberDirectory.App.Api.Services
 
         private async Task<IEnumerable<string>> GetWebsiteHeadings(string url)
         {
+            // Get the content of the member's website
             using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
             if (!response.IsSuccessStatusCode) return null;
 
+            // Parse the HTML and return the text for all H1 through H3 tags
             return _htmlParser.GetTextForHeadingTags(await response.Content.ReadAsStreamAsync());
         }
     }

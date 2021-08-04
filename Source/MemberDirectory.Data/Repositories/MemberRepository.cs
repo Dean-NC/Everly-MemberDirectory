@@ -47,9 +47,9 @@ namespace MemberDirectory.Data.Repositories
         /// <summary>
         /// Adds a new member.
         /// </summary>
-        /// <typeparam name="T">Any type that derives from DbResult.</typeparam>
+        /// <typeparam name="T">A DbResult class or class that derives from it.</typeparam>
         /// <param name="member">A data model with member information.</param>
-        /// <returns>A DbResult or child class of DbResult.</returns>
+        /// <returns>A DbResult or child class of DbResult, with the new record Id.</returns>
         public async Task<T> Add<T>(Member member) where T : DbResult, new()
         {
             T result = new();
@@ -124,6 +124,7 @@ namespace MemberDirectory.Data.Repositories
         /// <summary>
         /// Gets a member by Id.
         /// </summary>
+        /// <typeparam name="T">A Member model class or class that derives from it.</typeparam>
         /// <param name="id">The Id of the member to get.</param>
         public async Task<T> Get<T>(int id) where T : Member, new()
         {

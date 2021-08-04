@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace MemberDirectory.Data.Repositories
 {
     /// <summary>
-    /// Provides and manages data for directory members.
+    /// Provides and manages data for relationships between directory members.
     /// </summary>
     public class FriendshipRepository : RepositoryBase, Interfaces.IFriendshipRepository
     {
