@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -58,7 +59,7 @@ namespace MemberDirectory.App.Api.Services
             try
             {
                 // The values of any H1 through H3 tags in the person's website should be captured and stored.
-                var headingTexts = await GetWebsiteHeadings(data.WebsiteUrl);
+                (GenericResult websiteHeadingResult, ICollection<string> headingTexts) = await GetWebsiteHeadings(data.WebsiteUrl);
 
                 // The domain data model. Website URL should be shortened if possible.
                 Member member = new()
@@ -80,11 +81,22 @@ namespace MemberDirectory.App.Api.Services
                     }
 
                     // Add website headings to the database
-                    await _memberRepository.AddWebsiteHeadings(memberAddResult.RecordId, headingTexts);
+                    if (headingTexts != null && headingTexts.Count > 0)
+                    {
+                        await _memberRepository.AddWebsiteHeadings(memberAddResult.RecordId, headingTexts);
+                    }
 
-                    // Complete the transaction and return the result
+                    // Complete the transaction
                     trans.Complete();
                     memberAddResult.Entity = member;
+
+                    // If adding the member was successful, but getting the website headings was not, let the caller know
+                    // that the headings could not be retrieved by setting the result type to warning. A warning is not considered an error.
+                    if (memberAddResult.IsSuccess && !websiteHeadingResult.IsSuccess)
+                    {
+                        memberAddResult.ResultType = GenericEnums.ResultType.Warning;
+                        memberAddResult.Message = websiteHeadingResult.Message;
+                    }
 
                     return memberAddResult;
                 }
@@ -129,7 +141,7 @@ namespace MemberDirectory.App.Api.Services
 
             // Get the member record from the database.
             MemberProfile result = await _memberRepository.Get<MemberProfile>(id);
-            if (result?.Id <= 0) return result;
+            if (result == null || result.Id <= 0) return result;
 
             // Get the website headings for the member.
             result.WebsiteHeadings = await _memberRepository.GetWebsiteHeadings(id);
@@ -155,14 +167,46 @@ namespace MemberDirectory.App.Api.Services
             return result;
         }
 
-        private async Task<IEnumerable<string>> GetWebsiteHeadings(string url)
+        private async Task<(GenericResult, ICollection<string>)> GetWebsiteHeadings(string url)
         {
-            // Get the content of the member's website
-            using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-            if (!response.IsSuccessStatusCode) return null;
+            GenericResult result = new();
+            HttpResponseMessage response = null;
+            ICollection<string> headings = null;
+            const string genericProblemMessage = "There was a problem getting the website headings.";
 
-            // Parse the HTML and return the text for all H1 through H3 tags
-            return _htmlParser.GetTextForHeadingTags(await response.Content.ReadAsStreamAsync());
+            // If getting the website fails for any reason, don't throw an exception, but
+            // log the error and return a message indicating it didn't work.
+
+            try
+            {
+                // Get the content of the member's website
+                response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+                if (!response.IsSuccessStatusCode)
+                {
+                    result.ResultType = GenericEnums.ResultType.Warning;
+                    result.Message = genericProblemMessage;
+                }
+
+                // Parse the HTML and return the text for all H1 through H3 tags
+                headings = _htmlParser.GetTextForHeadingTags(await response.Content.ReadAsStreamAsync());
+            }
+            catch (SocketException ex) when (ex.ErrorCode == SharedHttpClient.HOST_NOT_FOUND)
+            {
+                result.SetError("The website could not be found.");
+            }
+            catch (Exception ex)
+            {
+                result.ResultType = GenericEnums.ResultType.Warning;
+                result.Message = genericProblemMessage;
+
+                _logger.LogError(ex, "url: " + url);
+            }
+            finally
+            {
+                response?.Dispose();
+            }
+
+            return new(result, headings);
         }
     }
 }

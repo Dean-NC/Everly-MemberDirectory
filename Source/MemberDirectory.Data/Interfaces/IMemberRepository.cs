@@ -12,7 +12,7 @@ namespace MemberDirectory.Data.Interfaces
 
         Task<T> Add<T>(Member member) where T : DbResult, new();
 
-        Task AddWebsiteHeadings(int memberId, IEnumerable<string> headings);
+        Task AddWebsiteHeadings(int memberId, ICollection<string> headings);
 
         Task<IEnumerable<string>> GetWebsiteHeadings(int memberId);
 

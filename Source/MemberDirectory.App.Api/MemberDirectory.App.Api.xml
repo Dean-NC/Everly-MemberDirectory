@@ -32,6 +32,28 @@
             Creates a member.
             </summary>
         </member>
+        <member name="T:MemberDirectory.App.Api.Models.BusinessResult`1">
+            <summary>
+            This is a common result class to return from business services when both a DbResult and
+            a model object are desired to be returned. It inherits from DbResult, which inherits from GenericResult.
+            </summary>
+            <typeparam name="T">Any class type.</typeparam>
+        </member>
+        <member name="T:MemberDirectory.App.Api.Models.Friend">
+            <summary>
+            Used as a "view model" for showing friends of a member.
+            </summary>
+        </member>
+        <member name="T:MemberDirectory.App.Api.Models.NewMember">
+            <summary>
+            The data model provided to the API that represents info needed to add a new member.
+            </summary>
+        </member>
+        <member name="T:MemberDirectory.App.Api.Services.AnonymousUrlShortener">
+            <summary>
+            This Url shortener uses a free remote service that currently does not require registration or an API key.
+            </summary>
+        </member>
         <member name="M:MemberDirectory.App.Api.Services.FriendshipService.MutualFriendSearch(System.Int32,System.String)">
             <summary>
             Searches for potential new friends for the given member, that share a mutual friend
@@ -47,6 +69,11 @@
             <param name="memberId">The Id of the member to add friends to.</param>
             <param name="friendIds">A list of member Ids to add as friends to the given member.</param>
         </member>
+        <member name="T:MemberDirectory.App.Api.Services.HtmlParser">
+            <summary>
+            Provides HTML parsing capability, like getting the text for Heading tags
+            </summary>
+        </member>
         <member name="M:MemberDirectory.App.Api.Services.HtmlParser.GetTextForHeadingTags(System.IO.Stream)">
             <summary>
             Gets the text of all H1 through H3 tags
@@ -54,9 +81,15 @@
             <param name="htmlStream">A stream with the HTML content to parse</param>
             <returns>A list of strings for all H1 through H3 tags combined</returns>
         </member>
+        <member name="M:MemberDirectory.App.Api.Services.MemberService.Add(MemberDirectory.App.Api.Models.NewMember)">
+            <summary>
+            Adds a new member.
+            </summary>
+            <param name="data">The required information for adding a new member.</param>
+        </member>
         <member name="M:MemberDirectory.App.Api.Services.MemberService.Get(System.Int32)">
             <summary>
-            Returns a simple member object for the given Id.
+            Returns a simple member object for the given member Id.
             </summary>
             <param name="id">The Id of the member</param>
         </member>

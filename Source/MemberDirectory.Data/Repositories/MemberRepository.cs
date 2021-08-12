@@ -80,8 +80,10 @@ namespace MemberDirectory.Data.Repositories
         /// </summary>
         /// <param name="memberId">The Id of the member to add the headings to.</param>
         /// <param name="headings">A list of strings for the headings text.</param>
-        public async Task AddWebsiteHeadings(int memberId, IEnumerable<string> headings)
+        public async Task AddWebsiteHeadings(int memberId, ICollection<string> headings)
         {
+            if (memberId <= 0 || headings == null | headings.Count == 0) return;
+
             string sql =
                @"Insert Into WebsiteHeading (MemberId, HeadingText)
 	                Select

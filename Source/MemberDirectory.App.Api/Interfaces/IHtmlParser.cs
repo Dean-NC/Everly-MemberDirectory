@@ -7,6 +7,6 @@ namespace MemberDirectory.App.Api.Interfaces
 {
     public interface IHtmlParser
     {
-        IEnumerable<string> GetTextForHeadingTags(System.IO.Stream htmlStream);
+        ICollection<string> GetTextForHeadingTags(System.IO.Stream htmlStream);
     }
 }

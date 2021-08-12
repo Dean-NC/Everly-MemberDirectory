@@ -26,7 +26,7 @@ namespace MemberDirectory.App.Api.Services
         /// </summary>
         /// <param name="htmlStream">A stream with the HTML content to parse</param>
         /// <returns>A list of strings for all H1 through H3 tags combined</returns>
-        public IEnumerable<string>GetTextForHeadingTags(System.IO.Stream htmlStream)
+        public ICollection<string> GetTextForHeadingTags(System.IO.Stream htmlStream)
         {
             List<string> result = new(10);
 
